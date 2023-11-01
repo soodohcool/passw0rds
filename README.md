@@ -1,5 +1,7 @@
 # passw0rds
 
+## https://soodohcool.github.io/passw0rds/
+
 ## Overview
 
 This script is designed to generate secure, easy-to-remember passphrases. It employs a variety of word types—adjectives, verbs, nouns, and plurals—to craft each passphrase according to a specified pattern. The script also includes options for leet transformations.
