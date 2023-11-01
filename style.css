@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+main {
+  margin: 0 auto;
+  width: 60%aazz  dzzzzzxzxzcx                                                                                                                                                ;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 0;
+}
+
+.help-text {
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+hr {
+  margin-bottom: 1em
+}
+
+label,
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px 7px 8px 8px;
+}
+
+label {
+  display: block;
+  padding: 0;
+  margin-bottom: 5px;
+}
+
+textarea {
+  line-height: 2;
+  font-size: larger
+}
+
+div {
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.row>div {
+  width: 48%
+}
+
+.row.thirds>div {
+  width: 32%
+}
+
+dialog {
+  width: 60%;
+  padding: 0;
+  background: linear-gradient(to bottom, #FFF, #F4F4F4) #FFF;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: dialog 300ms cubic-bezier(.3, 0, .1, 1.4) forwards 1;
+  will-change: transform, opacity;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, .45);
+}
+
+dialog .titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: darkblue;
+  padding: 10px;
+  color: white
+}
+
+dialog h4 {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+dialog .close-button {
+  outline: none;
+  font-size: 16px
+}
+
+@keyframes dialog {
+  from {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+}
+
+dialog::backdrop {
+  opacity: 0;
+  will-change: opacity;
+  cursor: no-drop;
+  background: radial-gradient(circle at center, rgba(50, 50, 50, 0.5), rgba(0, 0, 0, 0.5));
+  animation: backdrop 500ms ease forwards 1;
+}
+
+@keyframes backdrop {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

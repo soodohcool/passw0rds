@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Passphrase Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <dialog id="help">
+    <div class="titlebar">
+      <h4 class="title">Help</h4>
+      <button id="closeHelp" class="close-button">X</button>
+    </div>
+    <ul>
+      <li>
+        <strong>Number of Passphrases:</strong> Specifies the total number of passphrases to generate.
+      </li>
+      <li>
+        <strong>Max Leet Characters:</strong> Indicates the desired maximum number of characters to transform into
+        'leet' speak within each passphrase. The actual number may vary, but at least one character will be transformed.
+      </li>
+      <li>
+        <strong>Min Word Length:</strong> Sets the minimum length for each word fetched from the word files.
+      </li>
+      <li>
+        <strong>Max Word Length:</strong> Sets the maximum length for each word fetched from the word files.
+      </li>
+      <li>
+        <strong>Pattern:</strong> Determines the sequence and types of words to be used in the passphrase. You can
+        employ various combinations such as 'AVN', 'AAVNPAP', etc.
+        <ul>
+          <li><strong>A:</strong> Adjective</li>
+          <li><strong>V:</strong> Verb</li>
+          <li><strong>N:</strong> Noun</li>
+          <li><strong>P:</strong> Plural Nouns</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Transform:</strong> Selects the transformation method applied to the passphrase, which can be 'leet',
+        'miniLeet', or 'plain'.
+      </li>
+    </ul>
+  </dialog>
+  <main>
+    <h1>passw0rds</h1>
+    <p class="help-text">For more information, checkout <a id="showHelp" href="#">Configuration Help</a>
+      <hr>
+    <form id="configForm" class="pure-form">
+      <div class="row">
+        <div>
+          <label for="numPassphrases">Number of Passphrases: </label>
+          <input type="number" id="numPassphrases" name="numPassphrases" min="1" value="3">
+        </div>
+        <div>
+          <label for="maxLeetChars">Max Leet Characters: </label>
+          <input type="number" id="maxLeetChars" name="maxLeetChars" min="0" value="2">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="minLength">Minimum Word Length: </label>
+          <input type="number" id="minLength" name="minLength" min="1" value="4">
+        </div>
+        <div>
+          <label for="maxLength">Max Word Length: </label>
+          <input type="number" id="maxLength" name="maxLength" min="1" value="8">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="pattern">Pattern: </label>
+          <input type="text" id="pattern" name="pattern" value="AVNP">
+        </div>
+        <div>
+          <label for="transformation">Transformation: </label>
+          <select id="transformation" name="transformation">
+            <option value="leet">Leet</option>
+            <option value="miniLeet" selected>Mini Leet</option>
+            <option value="plain">Plain</option>
+          </select>
+        </div>
+      </div>
+      <div class="row thirds">
+        <div><input type="button" id="randomize" value="Randomize"></div>
+        <div><input type="button" id="generate" value="Generate Passphrase"></div>
+        <div><input type="button" id="default" value="Reset"></div>
+      </div>
+    </form>
+    <div id="output">
+      <textarea id="outputTextArea" rows="10" cols="50"></textarea>
+    </div>
+  </main> <q>                                                                                                                                                                     <q>                                       </q></q>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.js"></script>
+  <script>
+    const dialog = document.getElementById("help")
+    const showHelp = document.getElementById("showHelp")
+    const closeHelp = document.getElementById("closeHelp")
+    dialogPolyfill.registerDialog(dialog);
+    showHelp.addEventListener('click', () => dialog.showModal())
+    closeHelp.addEventListener('click', () => dialog.close())
+  </script>
+  <script src="passw0rds.js"></script>
+</body>
+
+</html>
