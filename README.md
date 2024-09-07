@@ -18,9 +18,11 @@ This script is designed to generate secure, easy-to-remember passphrases. It emp
 
 Clone the repository and include the script in your HTML file. Make sure to host the word list text files (adjectives.txt, nouns.txt, verbs.txt, plural_nouns.txt) in the same directory.
 
+For python version, make sure to use python 3 and run directly in your terminal. 
+
 ## Configuration
 
-The script uses a default configuration object to specify various options like the number of passphrases, minimum and maximum length, and leet transformation settings. You can modify these options via an HTML form.
+The script uses a default configuration object to specify various options like the number of passphrases, minimum and maximum length, and leet transformation settings. You can modify these options via an HTML form or via the terminal menu if using the python version. 
 
 ## Usage
 
@@ -28,6 +30,7 @@ The script uses a default configuration object to specify various options like t
 - Adjust the configuration settings as desired.
 - Click the "Generate" button to create passphrases. The generated passphrases will be displayed in a text area.
 - You can also click the "Randomize" button to randomize the configuration settings or the "Default" button to revert to the default settings.
+- For python version, simply use the appropriate number to navigate the menu. 
 
 ## Contributing
 
