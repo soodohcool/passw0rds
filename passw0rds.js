@@ -7,6 +7,7 @@ const config = {
   pluralsFile: 'plural_nouns.txt',
   minLength: 4,
   maxLength: 8,
+  minLeetChars: 1,
   maxLeetChars: 2,
   pattern: 'AVNP'
 };
@@ -28,7 +29,10 @@ function setDefaultConfig() {
   document.getElementById('numPassphrases').value = 3;
   document.getElementById('minLength').value = 4;
   document.getElementById('maxLength').value = 8;
+  document.getElementById('minLeetChars').value = 1;
   document.getElementById('maxLeetChars').value = 2;
+  document.getElementById('minLeetCharsValue').textContent = 1;
+  document.getElementById('maxLeetCharsValue').textContent = 2;
   document.getElementById('pattern').value = 'AVNP';
 }
 
@@ -39,6 +43,7 @@ function updateConfig() {
   config.numPassphrasesPassphrases = parseInt(document.getElementById('numPassphrases').value, 10);
   config.minLength = parseInt(document.getElementById('minLength').value, 10);
   config.maxLength = parseInt(document.getElementById('maxLength').value, 10);
+  config.minLeetChars = parseInt(document.getElementById('minLeetChars').value, 10);
   config.maxLeetChars = parseInt(document.getElementById('maxLeetChars').value, 10);
   config.transformation = document.getElementById('transformation').value;
   config.pattern = document.getElementById('pattern').value;
@@ -66,7 +71,12 @@ function randomizeConfig(outputTextArea) {
   document.getElementById('numPassphrases').value = Math.floor(Math.random() * 10) + 1;
   document.getElementById('minLength').value = 4;
   document.getElementById('maxLength').value = 99;
-  document.getElementById('maxLeetChars').value = randomTransformation === 'plain' ? 0 : Math.floor(Math.random() * 10) + 1;
+  const minLeet = Math.floor(Math.random() * 5);
+  const maxLeet = minLeet + Math.floor(Math.random() * (10 - minLeet));
+  document.getElementById('minLeetChars').value = minLeet;
+  document.getElementById('maxLeetChars').value = maxLeet;
+  document.getElementById('minLeetCharsValue').textContent = minLeet;
+  document.getElementById('maxLeetCharsValue').textContent = maxLeet;
   document.getElementById('pattern').value = randomPattern;
   transformationElement.value = randomTransformation;
 
@@ -91,15 +101,16 @@ function getRandomSeparator() {
  * @param {string} plainPassphrase - The original passphrase.
  * @param {string} transformationType - The type of transformation ('leet', 'miniLeet', 'plain').
  * @param {number[]} positions - Array of positions eligible for transformation.
+ * @param {number} minLeetChars - Minimum number of leet characters to apply.
  * @param {number} maxLeetChars - Maximum number of leet characters to apply.
  * @returns {string} The transformed passphrase.
  */
-function transformation(plainPassphrase, transformationType, positions, maxLeetChars) {
+function transformation(plainPassphrase, transformationType, positions, minLeetChars, maxLeetChars) {
   switch (transformationType) {
     case 'leet':
-      return leet(plainPassphrase, positions, maxLeetChars);
+      return leet(plainPassphrase, positions, minLeetChars, maxLeetChars);
     case 'miniLeet':
-      return miniLeet(plainPassphrase, positions, maxLeetChars);
+      return miniLeet(plainPassphrase, positions, minLeetChars, maxLeetChars);
     case 'plain':
     default:
       return plainPassphrase;
@@ -110,30 +121,37 @@ function transformation(plainPassphrase, transformationType, positions, maxLeetC
  * Transforms the given phrase to Leet Speak.
  * @param {string} phrase - The original phrase.
  * @param {number[]} positions - Array of positions eligible for transformation.
+ * @param {number} minLeetChars - Minimum number of leet characters to apply.
  * @param {number} maxLeetChars - Maximum number of leet characters to apply.
  * @returns {string} The transformed phrase.
  */
-function leet(phrase, positions, maxLeetChars) {
+function leet(phrase, positions, minLeetChars, maxLeetChars) {
   const leetMap = { 'a': '4', 'e': '3', 'i': '1', 'o': '0', 's': '$', 't': '7' };
   let phraseArray = Array.from(phrase);
-  let leetApplied = false;
+  let leetApplied = 0;
 
-  // Shuffle and select the first `maxLeetChars` positions
+  // Shuffle positions
   let shuffledPositions = positions.sort(() => 0.5 - Math.random());
 
-  // Ensure at least one leet character is applied
-  while (!leetApplied) {
-    for (const pos of shuffledPositions.slice(0, maxLeetChars)) {
-      const char = phraseArray[pos];
-      if (leetMap[char]) {
-        phraseArray[pos] = leetMap[char];
-        leetApplied = true;
-      }
+  // Apply leet transformations
+  for (const pos of shuffledPositions) {
+    const char = phraseArray[pos].toLowerCase();
+    if (leetMap[char] && leetApplied < maxLeetChars) {
+      phraseArray[pos] = leetMap[char];
+      leetApplied++;
     }
+    if (leetApplied >= maxLeetChars) break;
+  }
 
-    // Reshuffle positions if no leet character was applied
-    if (!leetApplied) {
-      shuffledPositions = positions.sort(() => 0.5 - Math.random());
+  // Ensure minimum leet characters are applied
+  while (leetApplied < minLeetChars) {
+    for (const pos of shuffledPositions) {
+      const char = phraseArray[pos].toLowerCase();
+      if (leetMap[char] && phraseArray[pos] !== leetMap[char]) {
+        phraseArray[pos] = leetMap[char];
+        leetApplied++;
+        break;
+      }
     }
   }
 
@@ -144,30 +162,37 @@ function leet(phrase, positions, maxLeetChars) {
  * Transforms the given word to Mini Leet Speak.
  * @param {string} word - The original word.
  * @param {number[]} positions - Array of positions eligible for transformation.
+ * @param {number} minLeetChars - Minimum number of leet characters to apply.
  * @param {number} maxLeetChars - Maximum number of leet characters to apply.
  * @returns {string} The transformed word.
  */
-function miniLeet(word, positions, maxLeetChars) {
+function miniLeet(word, positions, minLeetChars, maxLeetChars) {
   const miniLeetMap = { 'a': '4', 'e': '3', 'i': '1', 'o': '0' };
   let wordArray = Array.from(word);
-  let leetApplied = false;
+  let leetApplied = 0;
 
-  // Shuffle and select the first `maxLeetChars` positions
+  // Shuffle positions
   let shuffledPositions = positions.sort(() => 0.5 - Math.random());
 
-  // Ensure at least one leet character is applied
-  while (!leetApplied) {
-    for (const pos of shuffledPositions.slice(0, maxLeetChars)) {
-      const char = wordArray[pos];
-      if (miniLeetMap[char]) {
-        wordArray[pos] = miniLeetMap[char];
-        leetApplied = true;
-      }
+  // Apply mini leet transformations
+  for (const pos of shuffledPositions) {
+    const char = wordArray[pos].toLowerCase();
+    if (miniLeetMap[char] && leetApplied < maxLeetChars) {
+      wordArray[pos] = miniLeetMap[char];
+      leetApplied++;
     }
+    if (leetApplied >= maxLeetChars) break;
+  }
 
-    // Reshuffle positions if no leet character was applied
-    if (!leetApplied) {
-      shuffledPositions = positions.sort(() => 0.5 - Math.random());
+  // Ensure minimum leet characters are applied
+  while (leetApplied < minLeetChars) {
+    for (const pos of shuffledPositions) {
+      const char = wordArray[pos].toLowerCase();
+      if (miniLeetMap[char] && wordArray[pos] !== miniLeetMap[char]) {
+        wordArray[pos] = miniLeetMap[char];
+        leetApplied++;
+        break;
+      }
     }
   }
 
@@ -200,6 +225,15 @@ async function fetchWordList(filename) {
 //-----------------------------------------------------------------------------
 
 /**
+ * Capitalizes the first letter of a word with a 50% chance.
+ * @param {string} word - The word to potentially capitalize.
+ * @returns {string} The word with its first letter possibly capitalized.
+ */
+function randomlyCapitalize(word) {
+  return Math.random() < 0.5 ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+}
+
+/**
  * Generates a single passphrase.
  * @param {string[]} adjectives - List of adjectives.
  * @param {string[]} nouns - List of nouns.
@@ -221,7 +255,7 @@ function generatePassphrase(adjectives, nouns, verbs, plurals) {
       const index = Math.floor(Math.random() * wordMap[char].length);
       const word = wordMap[char][index];
       wordMap[char].splice(index, 1); // Remove the selected word
-      return word;
+      return randomlyCapitalize(word); // Apply random capitalization
     }
     return char;
   });
@@ -231,12 +265,12 @@ function generatePassphrase(adjectives, nouns, verbs, plurals) {
   // Identify positions that are eligible for leet transformation
   let leetEligiblePositions = [];
   for (let i = 0; i < plainPassphrase.length; i++) {
-    if ('aeiost'.includes(plainPassphrase[i])) {
+    if ('aeiost'.includes(plainPassphrase[i].toLowerCase())) {
       leetEligiblePositions.push(i);
     }
   }
 
-  return transformation(plainPassphrase, config.transformation, leetEligiblePositions, config.maxLeetChars);
+  return transformation(plainPassphrase, config.transformation, leetEligiblePositions, config.minLeetChars, config.maxLeetChars);
 }
 
 /**
@@ -301,12 +335,51 @@ document.getElementById('default').addEventListener('click', function () {
 });
 
 document.getElementById('transformation').addEventListener('change', function () {
-  const maxLeet = document.getElementById('maxLeetChars');
-  const transformationValue = this.value; // or event.target.value
+  const minLeetElement = document.getElementById('minLeetChars');
+  const maxLeetElement = document.getElementById('maxLeetChars');
+  const transformationValue = this.value;
 
   if (transformationValue === 'plain') {
-    maxLeet.value = 0;
-  } else if (transformationValue !== 'plain' && maxLeet.value === '0') { // note the value is a string
-    maxLeet.value = 2;
+    minLeetElement.value = 0;
+    maxLeetElement.value = 0;
+    document.getElementById('minLeetCharsValue').textContent = 0;
+    document.getElementById('maxLeetCharsValue').textContent = 0;
+  } else if (transformationValue !== 'plain' && minLeetElement.value === '0' && maxLeetElement.value === '0') {
+    minLeetElement.value = 1;
+    maxLeetElement.value = 2;
+    document.getElementById('minLeetCharsValue').textContent = 1;
+    document.getElementById('maxLeetCharsValue').textContent = 2;
   }
+  
+  updateConfig(); // Update the config object
+});
+
+document.getElementById('minLeetChars').addEventListener('input', function() {
+  const minValue = parseInt(this.value);
+  const maxElement = document.getElementById('maxLeetChars');
+  const maxValue = parseInt(maxElement.value);
+  
+  document.getElementById('minLeetCharsValue').textContent = minValue;
+  
+  if (minValue > maxValue) {
+    maxElement.value = minValue;
+    document.getElementById('maxLeetCharsValue').textContent = minValue;
+  }
+  
+  updateConfig(); // Update the config object
+});
+
+document.getElementById('maxLeetChars').addEventListener('input', function() {
+  const maxValue = parseInt(this.value);
+  const minElement = document.getElementById('minLeetChars');
+  const minValue = parseInt(minElement.value);
+  
+  document.getElementById('maxLeetCharsValue').textContent = maxValue;
+  
+  if (maxValue < minValue) {
+    minElement.value = maxValue;
+    document.getElementById('minLeetCharsValue').textContent = maxValue;
+  }
+  
+  updateConfig(); // Update the config object
 });

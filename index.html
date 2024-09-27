@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Passphrase Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -18,8 +18,13 @@
         <strong>Number of Passphrases:</strong> Specifies the total number of passphrases to generate.
       </li>
       <li>
-        <strong>Max Leet Characters:</strong> Indicates the desired maximum number of characters to transform into
-        'leet' speak within each passphrase. The actual number may vary, but at least one character will be transformed.
+        <strong>Leet Characters:</strong> Sets the minimum and maximum range of characters to transform within each
+        passphrase.
+        <ul>
+          <li><strong>Min:</strong> The minimum number of characters that will be transformed.</li>
+          <li><strong>Max:</strong> The maximum number of characters that will be transformed.</li>
+        </ul>
+        The actual number of transformed characters will be between these two values.
       </li>
       <li>
         <strong>Min Word Length:</strong> Sets the minimum length for each word fetched from the word files.
@@ -38,24 +43,34 @@
         </ul>
       </li>
       <li>
-        <strong>Transform:</strong> Selects the transformation method applied to the passphrase, which can be 'leet',
-        'miniLeet', or 'plain'.
+        <strong>Transform:</strong> Selects the transformation method applied to the passphrase:
+        <ul>
+          <li><strong>Leet:</strong> Applies full leet speak transformations.</li>
+          <li><strong>Mini Leet:</strong> Applies a simplified version of leet speak.</li>
+          <li><strong>Plain:</strong> No transformation is applied.</li>
+        </ul>
       </li>
     </ul>
   </dialog>
   <main>
-    <h1>passw0rds</h1>
-    <p class="help-text">For more information, checkout <a id="showHelp" href="#">Configuration Help</a>
-      <hr>
+    <h1 class="text-center">passw0rds</h1>
+    <p class="help-text text-center mb-3">For more information, checkout <a id="showHelp" href="#">Configuration Help</a></p>
+    <hr class="mb-3">
     <form id="configForm" class="pure-form">
       <div class="row">
         <div>
           <label for="numPassphrases">Number of Passphrases: </label>
           <input type="number" id="numPassphrases" name="numPassphrases" min="1" value="3">
         </div>
-        <div>
-          <label for="maxLeetChars">Max Leet Characters: </label>
-          <input type="number" id="maxLeetChars" name="maxLeetChars" min="0" value="2">
+        <div class="row mb-0">
+          <div>
+            <label for="minLeetChars">Min Leet Characters - <span id="minLeetCharsValue">1</span></label>
+            <input type="range" id="minLeetChars" name="minLeetChars" min="0" max="10" value="1">
+          </div>
+          <div>
+            <label for="maxLeetChars">Max Leet Characters - <span id="maxLeetCharsValue">2</span></label>
+            <input type="range" id="maxLeetChars" name="maxLeetChars" min="0" max="10" value="2">
+          </div>
         </div>
       </div>
       <div class="row">
@@ -89,9 +104,9 @@
       </div>
     </form>
     <div id="output">
-      <textarea id="outputTextArea" rows="10" cols="50"></textarea>
+      <textarea id="outputTextArea" rows="10" cols="50" class="fs-larger"></textarea>
     </div>
-  </main> <q>                                                                                                                                                                     <q>                                       </q></q>
+  </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.4.9/dialog-polyfill.min.js"></script>
   <script>
     const dialog = document.getElementById("help")

@@ -9,11 +9,10 @@ body {
 
 main {
   margin: 0 auto;
-  width: 70%;                                                                                                                             ;
+  width: 70%;
 }
 
 h1 {
-  text-align: center;
   font-size: 3em;
   margin-bottom: 0;
 }
@@ -72,10 +71,16 @@ dialog {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   animation: dialog 300ms cubic-bezier(.3, 0, .1, 1.4) forwards 1;
   will-change: transform, opacity;
+  line-height: 1.618;
 }
 
 dialog::backdrop {
   background: rgba(0, 0, 0, .45);
+  opacity: 0;
+  will-change: opacity;
+  cursor: no-drop;
+  background: radial-gradient(circle at center, rgba(50, 50, 50, 0.5), rgba(0, 0, 0, 0.5));
+  animation: backdrop 500ms ease forwards 1;
 }
 
 dialog .titlebar {
@@ -103,14 +108,6 @@ dialog .close-button {
     transform: scale(0.1);
     opacity: 0;
   }
-}
-
-dialog::backdrop {
-  opacity: 0;
-  will-change: opacity;
-  cursor: no-drop;
-  background: radial-gradient(circle at center, rgba(50, 50, 50, 0.5), rgba(0, 0, 0, 0.5));
-  animation: backdrop 500ms ease forwards 1;
 }
 
 @keyframes backdrop {
